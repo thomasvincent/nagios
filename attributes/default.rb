@@ -105,8 +105,8 @@ else
 end
 
 # for server from source installation
-default['nagios']['server']['url']       = 'http://iweb.dl.sourceforge.net/project/nagios/nagios-4.x/nagios-4.0.8/nagios-4.0.8.tar.gz'
-default['nagios']['server']['checksum']  = '8b268d250c97851775abe162f46f64724f95f367d752ae4630280cc5d368ca4b'
+default['nagios']['server']['url']       = 'http://downloads.sourceforge.net/project/nagios/nagios-4.x/nagios-4.2.1/nagios-4.2.1.tar.gz'
+default['nagios']['server']['checksum']  = 'cb62c5c16964cfc143b126a576a7f8130e634cb9dda4dd3bd3632598d7855a87'
 default['nagios']['server']['src_dir']   = node['nagios']['server']['url'].split('/')[-1].chomp('.tar.gz')
 default['nagios']['server']['patches']   = []
 default['nagios']['server']['patch_url'] = nil
