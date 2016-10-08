@@ -23,6 +23,7 @@ nagios_bags = NagiosDataBags.new
 hostgroups = nagios_bags.get(node['nagios']['hostgroups_databag'])
 hostgroups.each do |group|
   next if group['search_query'].nil?
+  group['hostgroup_name'] = group['id'] if group['hostgroup_name'].nil?
   if node['nagios']['multi_environment_monitoring']
     query_environments = node['nagios']['monitored_environments'].map do |environment|
       "chef_environment:#{environment}"
