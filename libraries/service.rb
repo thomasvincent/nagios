@@ -261,6 +261,14 @@ class Nagios
       @servicegroups.values.map(&:to_s).sort.join(',')
     end
 
+    def service_template
+      @use
+    end
+
+    def service_template=(name)
+      @use = name
+    end
+
     def self.create(name)
       Nagios.instance.find(Nagios::Service.new(name))
     end
@@ -416,6 +424,7 @@ class Nagios
         'host_name_list'               => 'host_name',
         'hostgroup_name_list'          => 'hostgroup_name',
         'servicegroups_list'           => 'servicegroups',
+        'service_template'             => nil,
         'display_name'                 => 'display_name',
         'is_volatile'                  => 'is_volatile',
         'check_command'                => 'check_command',
