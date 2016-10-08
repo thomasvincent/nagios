@@ -24,13 +24,7 @@ class Nagios
   class Base
     attr_accessor :register,
                   :name,
-                  :use,
-                  :not_modifiers
-
-    def initialize
-      @add_modifiers = {}
-      @not_modifiers = Hash.new { |h, k| h[k] = {} }
-    end
+                  :use
 
     def merge!(obj)
       merge_members(obj)
@@ -129,17 +123,10 @@ class Nagios
     end
     # rubocop:enable MethodLength
 
-    def get_commands(obj)
-      obj.map(&:to_s).join(',')
-    end
-
-    def configured_option(method, option)
+    def configured_option(method)
       value = send(method)
       return nil if blank?(value)
-      value = value.split(',') if value.is_a? String
-      value = value.map do |e|
-        (@not_modifiers[option][e] || '') + e
-      end.join(',') if value.is_a? Array
+      value = value.join(',') if value.is_a?(Array)
       value
     end
 
@@ -147,11 +134,31 @@ class Nagios
       configured = {}
       config_options.each do |m, o|
         next if o.nil?
-        value = configured_option(m, o)
+        value = configured_option(m)
         next if value.nil?
         configured[o] = value
       end
       configured
+    end
+
+    def exclude(obj)
+      Chef::Log.debug("Nagios debug: Cannot exclude #{obj} into #{self.class}")
+    end
+
+    def exclude_object(obj, hash)
+      return if hash.key?('null')
+      if obj.to_s == 'null'
+        hash.clear
+        hash[obj.to_s] = obj
+      elsif hash[obj.to_s].nil?
+        hash[obj.to_s] = obj
+      else
+        Chef::Log.debug("Nagios debug: #{self.class} already contains #{obj.class} with name: #{obj}")
+      end
+    end
+
+    def get_commands(obj)
+      obj.map(&:to_s).join(',')
     end
 
     def get_definition(options, group)
@@ -168,7 +175,7 @@ class Nagios
       longest = get_longest_option(options)
       options.each do |k, v|
         k = k.to_s
-        v = (@add_modifiers[k] || '') + v.to_s
+        v = v.to_s
         diff = longest - k.length
         r.push(k.rjust(k.length + 2) + v.rjust(v.length + diff + 2))
       end
@@ -288,22 +295,18 @@ class Nagios
 
     def update_members(hash, option, object, remote = false)
       return if blank?(hash) || hash[option].nil?
-      if hash[option].is_a?(String) && hash[option].start_with?('+')
-        @add_modifiers[option] = '+'
-        hash[option] = hash[option][1..-1]
-      end
       get_members(hash[option], object).each do |member|
         if member.start_with?('!')
-          member = member[1..-1]
-          @not_modifiers[option][member] = '!'
+          n = Nagios.instance.find(object.new(member[1..-1]))
+          exclude(n)
+        else
+          n = Nagios.instance.find(object.new(member))
+          push(n)
         end
-        n = Nagios.instance.find(object.new(member))
-        push(n)
         n.push(self) if remote
       end
     end
-    # rubocop:enable MethodLength
-
+    
     def update_dependency_members(hash, option, object)
       return if blank?(hash) || hash[option].nil?
       get_members(hash[option], object).each do |member|

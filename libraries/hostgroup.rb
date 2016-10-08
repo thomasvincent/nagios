@@ -38,11 +38,21 @@ class Nagios
       @hostgroup_name = hostgroup_name
       @members = {}
       @hostgroup_members = {}
-      super()
+      @exclude_members = {}
+      @excude_hostgroup_members = {}
     end
 
     def definition
       get_definition(configured_options, 'hostgroup')
+    end
+
+    def exclude(obj)
+      case obj
+      when Nagios::Host
+        exclude_object(obj, @exclude_members)
+      when Nagios::Hostgroup
+        exclude_object(obj, @excude_hostgroup_members)
+      end
     end
 
     def hostgroup_members_list
@@ -56,7 +66,9 @@ class Nagios
     end
 
     def members_list
-      @members.values.map(&:to_s).sort.join(',')
+      result = exclude_members.map {|i| "!#{i}" }
+      result += @members.values.map(&:to_s).sort - exclude_members
+      result.join(',')
     end
 
     def push(obj)
@@ -110,6 +122,10 @@ class Nagios
       }
     end
     # rubocop:enable MethodLength
+
+    def exclude_members
+      @exclude_members.values.map(&:to_s).sort
+    end
 
     def merge_members(obj)
       obj.members.each { |m| push(m) }

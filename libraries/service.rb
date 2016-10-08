@@ -79,9 +79,10 @@ class Nagios
       @contacts            = {}
       @contact_groups      = {}
       @hostgroups          = {}
+      @exclude_hostgroups  = {}
       @hosts               = {}
+      @exclude_hosts       = {}
       @custom_options      = {}
-      super()
     end
     # rubocop:enable MethodLength
 
@@ -133,6 +134,15 @@ class Nagios
       end
     end
 
+    def exclude(obj)
+      case obj
+      when Nagios::Host
+        exclude_object(obj, @exclude_hosts)
+      when Nagios::Hostgroup
+        exclude_object(obj, @exclude_hostgroups)
+      end
+    end
+
     # host_name
     # This directive is used to return all host objects
     def host_name
@@ -143,7 +153,9 @@ class Nagios
     # This directive is used to specify the short name(s) of the host(s) that the service
     # "runs" on or is associated with. Multiple hosts should be separated by commas.
     def host_name_list
-      @hosts.values.map(&:to_s).sort.join(',')
+      result = exclude_hosts.map {|i| "!#{i}" }
+      result += @hosts.values.map(&:to_s).sort - exclude_hosts
+      result.join(',')
     end
 
     # hostgroup_name
@@ -157,7 +169,9 @@ class Nagios
     # service "runs" on or is associated with. Multiple hostgroups should be separated by commas.
     # The hostgroup_name may be used instead of, or in addition to, the host_name directive.
     def hostgroup_name_list
-      @hostgroups.values.map(&:to_s).sort.join(',')
+      result = exclude_hostgroups.map {|i| "!#{i}" }
+      result += @hostgroups.values.map(&:to_s).sort - exclude_hostgroups
+      result.join(',')
     end
 
     def import(hash)
@@ -442,6 +456,14 @@ class Nagios
       }
     end
     # rubocop:enable MethodLength
+
+    def exclude_hosts
+      @exclude_hosts.values.map(&:to_s).sort
+    end
+
+    def exclude_hostgroups
+      @exclude_hostgroups.values.map(&:to_s).sort
+    end
 
     def merge_members(obj)
       obj.contacts.each { |m| push(m) }

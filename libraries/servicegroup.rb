@@ -38,7 +38,6 @@ class Nagios
       @servicegroup_name = servicegroup_name
       @members = {}
       @servicegroup_members = {}
-      super()
     end
 
     def definition
@@ -123,18 +122,13 @@ class Nagios
       hostgroup_hash = {}
       @members.each do |service_name, service_obj|
         hostgroup_array = []
-        service_obj.hostgroups.each do |hostgroup_name, hostgroup_obj|
-          if service_obj.not_modifiers['hostgroup_name'][hostgroup_name] != '!'
-            hostgroup_array += hostgroup_obj.members.keys
-          else
-            hostgroup_array -= hostgroup_obj.members.keys
-          end
+        service_obj.hostgroups.each do |_, hostgroup_obj|
+          hostgroup_obj.members.each { |host_name, _| hostgroup_array << host_name }
         end
         hostgroup_hash[service_name] = hostgroup_array
       end
       convert_hostgroup_hash(hostgroup_hash)
     end
-    # rubocop:enable MethodLength
 
     def merge_members(obj)
       obj.members.each { |m| push(m) }
