@@ -2,6 +2,5 @@
   "id": "service_c",
   "hostgroup_name": "hostgroup_b, hostgroup_c",
   "command_line": "$USER1$/check_nothing...",
-  "service_template": "service_a",
   "servicegroups": "servicegroup_a, servicegroup_b"
 }
