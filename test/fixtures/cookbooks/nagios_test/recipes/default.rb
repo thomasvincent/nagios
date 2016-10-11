@@ -67,3 +67,8 @@ nagios_host 'bighost2' do
           'address'        => '192.168.1.4',
           'check_interval' => '20'
 end
+
+# the bighostgroup should contain bighost1 and bithost2
+nagios_hostgroup 'bighostgroup' do
+  options 'hostgroup_members' => 'bighost1, bighost2'
+end
