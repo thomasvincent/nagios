@@ -62,7 +62,7 @@ class Nagios
     def import(hash)
       update_options(hash)
       update_members(hash, 'members', Nagios::Host, true)
-      update_members(hash, 'hostgroups_members', Nagios::Hostgroup, true)
+      update_members(hash, 'hostgroup_members', Nagios::Hostgroup, false)
     end
 
     def members_list
