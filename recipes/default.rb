@@ -11,11 +11,11 @@
 # Copyright 2009-2016, Chef Software, Inc.
 # Copyright 2013-2014, Limelight Networks, Inc.
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
+# Licensed under the httpd License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.httpd.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,14 +40,14 @@ when 'nginx'
   include_recipe 'nagios::nginx'
   web_user = node['nginx']['user']
   web_group = node['nginx']['group'] || web_user
-when 'apache'
+when 'httpd'
   Chef::Log.info 'Setting up Nagios server via httpd'
-  include_recipe 'nagios::apache'
-  web_user = node['apache']['user']
-  web_group = node['apache']['group'] || web_user
+  include_recipe 'nagios::httpd'
+  web_user = node['httpd']['run_user']
+  web_group = node['httpd']['run_group'] || web_user
 else
   Chef::Log.fatal('Unknown web server option provided for Nagios server: ' \
-                  "#{node['nagios']['server']['web_server']} provided. Allowed: 'nginx' or 'apache'")
+                  "#{node['nagios']['server']['web_server']} provided. Allowed: 'nginx' or 'httpd'")
   raise 'Unknown web server option provided for Nagios server'
 end
 
@@ -61,24 +61,24 @@ Chef::Log.fatal("Could not find users in the \"#{node['nagios']['users_databag']
 # configure the appropriate authentication method for the web server
 case node['nagios']['server_auth_method']
 when 'openid'
-  if node['nagios']['server']['web_server'] == 'apache'
-    include_recipe 'httpd::mod_auth_openid'
+  if node['nagios']['server']['web_server'] == 'httpd'
+    Chef::Log('Need to OpenID authentication configuration')
   else
     Chef::Log.fatal('OpenID authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
     raise 'OpenID authentication not supported on NGINX'
   end
 when 'cas'
-  if node['nagios']['server']['web_server'] == 'apache'
-    include_recipe 'httpd::mod_auth_cas'
+  if node['nagios']['server']['web_server'] == 'httpd'
+    Chef::Log('Need to CAS authentication configuration')
   else
     Chef::Log.fatal('CAS authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
     raise 'CAS authentivation not supported on NGINX'
   end
 when 'ldap'
-  if node['nagios']['server']['web_server'] == 'apache'
-    include_recipe 'httpd::mod_authnz_ldap'
+  if node['nagios']['server']['web_server'] == 'httpd'
+    Chef::Log('Need to LDAP authentication configuration')
   else
     Chef::Log.fatal('LDAP authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
