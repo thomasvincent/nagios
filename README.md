@@ -1,8 +1,8 @@
-nagios cookbook
+fork of nagios cookbook to support httpd cookbook
 ===============
 
 [![Join the chat at https://gitter.im/schubergphilis/nagios](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/schubergphilis/nagios?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/schubergphilis/nagios.svg)](https://travis-ci.org/schubergphilis/nagios)
+[![Build Status](https://travis-ci.org/thomasvincent/nagios.svg)](https://travis-ci.org/thomasvincent/nagios)
 [![Cookbook Version](https://img.shields.io/cookbook/v/nagios.svg)](https://supermarket.chef.io/cookbooks/nagios)
 
 Installs and configures Nagios server. Chef nodes are automatically discovered using search, and Nagios host groups are created based on Chef roles and optionally environments as well.
