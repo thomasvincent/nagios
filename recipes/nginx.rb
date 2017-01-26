@@ -17,7 +17,7 @@
 #
 
 if node['nagios']['server']['stop_apache']
-  service 'apache2' do
+  service 'httpd' do
     action :stop
   end
 end

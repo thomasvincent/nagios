@@ -21,7 +21,7 @@ describe 'nagios::default' do
 
   before do
     stub_command('dpkg -l nagios3').and_return(true)
-    stub_command('/usr/sbin/apache2 -t').and_return(true)
+    stub_command('/usr/sbin/httpd -t').and_return(true)
   end
 
   it 'should include the server_package recipe' do

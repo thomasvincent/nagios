@@ -33,7 +33,7 @@ nagios_service_name = if platform_family?('debian') && node['nagios']['server'][
 # install nagios service either from source of package
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
 
-# configure either Apache2 or NGINX
+# configure either httpd or NGINX
 case node['nagios']['server']['web_server']
 when 'nginx'
   Chef::Log.info 'Setting up Nagios server via NGINX'
@@ -41,7 +41,7 @@ when 'nginx'
   web_user = node['nginx']['user']
   web_group = node['nginx']['group'] || web_user
 when 'apache'
-  Chef::Log.info 'Setting up Nagios server via Apache2'
+  Chef::Log.info 'Setting up Nagios server via httpd'
   include_recipe 'nagios::apache'
   web_user = node['apache']['user']
   web_group = node['apache']['group'] || web_user
@@ -62,7 +62,7 @@ Chef::Log.fatal("Could not find users in the \"#{node['nagios']['users_databag']
 case node['nagios']['server_auth_method']
 when 'openid'
   if node['nagios']['server']['web_server'] == 'apache'
-    include_recipe 'apache2::mod_auth_openid'
+    include_recipe 'httpd::mod_auth_openid'
   else
     Chef::Log.fatal('OpenID authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
@@ -70,7 +70,7 @@ when 'openid'
   end
 when 'cas'
   if node['nagios']['server']['web_server'] == 'apache'
-    include_recipe 'apache2::mod_auth_cas'
+    include_recipe 'httpd::mod_auth_cas'
   else
     Chef::Log.fatal('CAS authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")
@@ -78,7 +78,7 @@ when 'cas'
   end
 when 'ldap'
   if node['nagios']['server']['web_server'] == 'apache'
-    include_recipe 'apache2::mod_authnz_ldap'
+    include_recipe 'httpd::mod_authnz_ldap'
   else
     Chef::Log.fatal('LDAP authentication for Nagios is not supported on NGINX')
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your Nagios role")

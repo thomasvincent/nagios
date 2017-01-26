@@ -45,7 +45,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 
 ### Improvement
 - Added logic to exclude nodes based on tag.
-- Including apache2::mpm_prefork for apache.
+- Including httpd::mpm_prefork for apache.
 - Added the ability to specify command arguments within services.
 - Added the ability to specify custom options on hosts, contacts and services.
 
@@ -169,7 +169,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Allow defining parents in the unmanaged hosts data bag so you can build the host map.
 
 ### Bug
-- Setup Apache2 before trying to configure the webserver so paths will be created
+- Setup httpd before trying to configure the webserver so paths will be created
 - Installed EPEL on RHEL so package installs work
 - Set the Apache log dir to that provided by Apache since the Nagios log dir is now locked down to just the nagios user / group
 - Template the resource.cfg file on RHEL platforms to prevent check failures
@@ -188,7 +188,7 @@ This file is used to list changes made in each version of the nagios cookbook.
 - Fixed permissions being changed on the resource directory during each run on RHEL systems
 
 ### Improvement
-- Remove support for SSL V2 / V3 (Apache2/NGINX) and add TLS 1.1 and 1.2 (NGINX)
+- Remove support for SSL V2 / V3 (httpd/NGINX) and add TLS 1.1 and 1.2 (NGINX)
 - Cleaned up and removed duplicate code from the web server configuration
 
 ### New Features
@@ -206,7 +206,7 @@ v6.0.4
 ### Bug
 - Fix normalized hostnames not normalizing the hostgroups
 - Don't register the service templates so that Nagios will start properly
-- Require Apache2 cookbook version 2.0 or greater due to breaking changes with how site.conf files are handled
+- Require httpd cookbook version 2.0 or greater due to breaking changes with how site.conf files are handled
 
 ### Improvement
 - Added additional options for perfdata
@@ -240,7 +240,7 @@ v6.0.0
 - Ensure that the hostgroups array doesn't include duplicates in the even that an environment and role have the same name
 - Only template nagios.cfg once
 - Fix ocsp-command typo in nagios.cfg
-- Fix bug that prevented Apache2 recipe from completing
+- Fix bug that prevented httpd recipe from completing
 
 ### Improvement
 - Readme cleanup
@@ -463,7 +463,7 @@ The main incompatibility and breaking change is that the default services that a
 - [COOK-2240] - Nagios server setup needs to gracefully fail when users data bag is not present
 - [COOK-2241] - Stylesheets fail to load on a fresh Nagios install
 - [COOK-2242] - Remove unused checks in the NRPE config file
-- [COOK-2245] - nagios::server writes openid apache configs before including apache2::mod_auth_openid
+- [COOK-2245] - nagios::server writes openid apache configs before including httpd::mod_auth_openid
 - [COOK-2246] - Most of the commands in the Nagios cookbook don't work
 - [COOK-2247] - nagios::client_source sets pkgs to a string, then tries to pkgs.each do {|pkg| package pkg }
 - [COOK-2257] - Nagios incorrectly tries to use cloud IPs due to a OHAI bug
@@ -515,7 +515,7 @@ v2.0.0
 - [COOK-1618] - Users data bag group allowed to log into Nagios should be configurable
 - [COOK-1696] - Nagios: Support defining non-Chef managed hosts via data bag items
 - [COOK-1697] - nagios: Source installs should install the latest NRPE and Nagios plugins
-- [COOK-1717] - Nagios: nagios server web page under Apache2 fails to load out of the box
+- [COOK-1717] - Nagios: nagios server web page under httpd fails to load out of the box
 - [COOK-1723] - Amazon missing as a supported OS in the Nagios metadata
 - [COOK-1732] - `nagios::client_source` includes duplicate resources
 - [COOK-1815] - Switch Nagios to use platform_family not platform

@@ -29,7 +29,7 @@ The functionality that was previously in the nagios::client recipe has been move
 **Notes**: This cookbook has been tested on the listed platforms. It may work on other platforms with or without modification.
 
 ### Cookbooks
-* apache2 2.0 or greater
+* httpd 2.0 or greater
 * build-essential
 * nginx
 * nginx_simplecgi
@@ -90,7 +90,7 @@ Example: `default['nagios']['conf']['cfg_dir'] = [ '/etc/nagios/conf.d' , '/usr/
 * `node['nagios']['default_user_name']` - Specify a defaut guest user to allow page access without authentication.  **Only** use this if nagios is running behind a secure webserver and users have been authenticated in some manner.  You'll likely want to change `node['nagios']['server_auth_require']` to `all granted`.  Defaults to `nil`.
 * `node['nagios']['sysadmin_email']` - default notification email.
 * `node['nagios']['sysadmin_sms_email']` - default notification sms.
-* `node['nagios']['server_auth_method']` - authentication with the server can be done with openid (using `apache2::mod_auth_openid`), cas (using `apache2::mod_auth_cas`),ldap (using `apache2::mod_authnz_ldap`), or htauth (basic). The default is htauth. "openid" will utilize openid authentication, "cas" will utilize cas authentication, "ldap" will utilize LDAP authentication, and any other value will use htauth (basic).
+* `node['nagios']['server_auth_method']` - authentication with the server can be done with openid (using `httpd::mod_auth_openid`), cas (using `httpd::mod_auth_cas`),ldap (using `httpd::mod_authnz_ldap`), or htauth (basic). The default is htauth. "openid" will utilize openid authentication, "cas" will utilize cas authentication, "ldap" will utilize LDAP authentication, and any other value will use htauth (basic).
 * `node['nagios']['cas_login_url']` - login url for cas if using cas authentication.
 * `node['nagios']['cas_validate_url']` - validation url for cas if using cas authentication.
 * `node['nagios']['cas_validate_server']` - whether to validate the server cert. Defaults to off.
@@ -182,7 +182,7 @@ The recipe does the following:
 4. Installs various packages required for the server.
 5. Sets up configuration directories.
 6. Moves the package-installed Nagios configuration to a 'dist' directory.
-7. Disables the 000-default VirtualHost present on Debian/Ubuntu Apache2 package installations.
+7. Disables the 000-default VirtualHost present on Debian/Ubuntu httpd package installations.
 8. Templates configuration files for services, contacts, contact groups, templates, hostgroups and hosts.
 9. Enables the Nagios web UI.
 10. Starts the Nagios server service

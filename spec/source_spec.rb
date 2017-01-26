@@ -21,7 +21,7 @@ describe 'nagios::default' do
   end
 
   before do
-    stub_command('/usr/sbin/apache2 -t').and_return(true)
+    stub_command('/usr/sbin/httpd -t').and_return(true)
   end
 
   it 'should include the server_source recipe' do

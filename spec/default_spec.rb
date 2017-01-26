@@ -19,18 +19,18 @@ describe 'nagios::default' do
 
   before do
     stub_command('dpkg -l nagios3').and_return(true)
-    stub_command('/usr/sbin/apache2 -t').and_return(true)
+    stub_command('/usr/sbin/httpd -t').and_return(true)
   end
 
-  it 'should include apache2 recipe' do
-    expect(chef_run).to include_recipe('apache2')
+  it 'should include httpd recipe' do
+    expect(chef_run).to include_recipe('httpd')
   end
 
   it 'should create conf_dir' do
     expect(chef_run).to create_directory('/etc/nagios3')
   end
 
-  it 'should template apache2 htpassword file with only admins' do
+  it 'should template httpd htpassword file with only admins' do
     expect(chef_run).to render_file('/etc/nagios3/htpasswd.users')
   end
 

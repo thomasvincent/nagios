@@ -186,7 +186,7 @@ default['nagios']['default_service']['notification_interval'] = 1200
 default['nagios']['default_service']['flap_detection']        = true
 default['nagios']['default_service']['action_url']            = nil
 
-default['nagios']['server']['web_server']              = 'apache'
+default['nagios']['server']['web_server']              = 'httpd'
 default['nagios']['server']['nginx_dispatch']          = 'cgi'
 default['nagios']['server']['stop_apache']             = false
 default['nagios']['server']['normalize_hostname']      = false
@@ -220,8 +220,8 @@ default['nagios']['brokers'] = {}
 # attribute defining tag used to exclude hosts
 default['nagios']['exclude_tag_host'] = ''
 
-# Set the prefork module for Apache as PHP is not thread-safe
-default['apache']['mpm'] = 'prefork'
+# Set the prefork module for Apache httpd as PHP is not thread-safe
+default['httpd']['mpm'] = 'prefork'
 
 # attribute to add commands to source build
 default['nagios']['source']['add_build_commands'] = ['make install-exfoliation']
