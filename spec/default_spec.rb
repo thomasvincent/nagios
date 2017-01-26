@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'nagios::default' do
+let(:chef_run) { ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '14.04').converge(describe 'nagios::default' do) }
   cached(:chef_run) do
     ChefSpec::ServerRunner.new do |_node, server|
       server.create_data_bag(
